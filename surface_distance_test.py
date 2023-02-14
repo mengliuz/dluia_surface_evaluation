@@ -2,6 +2,7 @@ from scipy.spatial.distance import directed_hausdorff
 import numpy as np
 from chamfer_distance import ChamferDistance
 import torch
+import tqdm
 
 with open("scan_001.xyz","r") as fid:
     pointcloud_01 = fid.read()
@@ -53,7 +54,7 @@ def f_score(gt, pred, radius):
     tp = 0
     fp = 0
     fn = 0
-    for p in pred:
+    for p in tqdm.tqdm(pred):
         detected = False
         for g in gt:
             if np.linalg.norm(p - g) < radius:
@@ -63,7 +64,7 @@ def f_score(gt, pred, radius):
         if not detected:
             fp += 1
     
-    for g in gt:
+    for g in tqdm.tqdm(gt):
         detected = False
         for p in pred:
             if np.linalg.norm(p - g) < radius:
